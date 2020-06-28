@@ -2,11 +2,13 @@
 
 namespace App\Controllers;
 
-class HomeController
+use system\Controller;
+
+class HomeController extends Controller
 {
     public function index()
     {
-        echo 'Welcome Home';
+       echo $this->session->get('name');
     }
 }
 
