@@ -54,11 +54,11 @@ class Application
 
         $this->request->prepareUrl();
 
-        $this->file->require('App/index.php');
+        $this->file->call('App/index.php');
 
         list($controller, $method, $arguments) = $this->route->getProperRoute();
 
-        
+        $this->load->action($controller, $method, $arguments);
     }
     /**
      * Register classes in spl auto load register
@@ -84,7 +84,7 @@ class Application
            $file='vendor/' . $class . '.php';
            }
            if($this->file->exists($file)){
-            $this->file->require($file);
+            $this->file->call($file);
        }
     }
     /**
@@ -94,7 +94,7 @@ class Application
      */
     private function loadHelpers()
     {
-        $this->file->require('vendor/helpers.php');
+        $this->file->call('vendor/helpers.php');
     }
     /**
      * Get share Value

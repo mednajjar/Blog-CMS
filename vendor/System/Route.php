@@ -45,7 +45,7 @@ class Route
             'url' => $url,
             'pattern' => $this->generatePattern($url),
             'action' => $this->getAction($action),
-            'method' => $requestMethod,
+            'method' => strtoupper($requestMethod),
 
         ];
         $this->routes[]=$route;
