@@ -110,7 +110,7 @@ class Loader
 
         $controller = 'App\\Controllers\\' . $controller;
 
-        return $controller;
+        return str_replace('/', '\\', $controller);
     }
     /**
      * Call the given model

@@ -2,13 +2,20 @@
 
 namespace App\Controllers;
 
-use system\Controller;
+use System\Controller;
 
 class HomeController extends Controller
 {
     public function index()
     {
-       echo $this->session->get('name');
+        $this->response->setHeader('name', 'Mido');
+
+        
+
+        $data['my_name'] = 'Mohammed';
+       return $this->view->render('home', $data);
+
+      
     }
 }
 
