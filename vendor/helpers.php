@@ -1,20 +1,20 @@
  <?php
 
-// if (!function_exists('pre'))
-//  {
-//     /**
-//      * Visualize the given variable in browser
-//      * 
-//      * @param mixed $var
-//      * @return void
-//      */
-//     function pre($var)
-//     {
-//        echo '<pre>';
-//        print_r($var);
-//        echo '</pre>'; 
-//     }
-//  }
+if (!function_exists('pre'))
+ {
+    /**
+     * Visualize the given variable in browser
+     * 
+     * @param mixed $var
+     * @return void
+     */
+    function pre($var)
+    {
+       echo '<pre>';
+       print_r($var);
+       echo '</pre>'; 
+    }
+ }
 
 if(! function_exists('array_get')){
     /**
@@ -28,6 +28,20 @@ if(! function_exists('array_get')){
     function array_get($array, $key, $default = null)
     {
         return isset($array[$key]) ? $array[$key] : $default;
+    }
+}
+
+if(! function_exists('_e')){
+
+    /**
+     * Escape the given value
+     * 
+     * @param string $value
+     * @return string
+     */
+    function _e($value)
+    {
+        return htmlspecialchars($value);
     }
 }
 
