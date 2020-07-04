@@ -9,6 +9,12 @@ class HomeController extends Controller
 {
     public function index()
     {
+        pre($this->db->where('id !=?', 2)->fetchAll('users'));
+        echo $this->db->rows();
+        pre($this->db->fetchAll('users'));
+        // $users = $this->db->select('*')->from('users')->orderBy('id')->fetchAll();
+
+        // pre($users);
        
         // $this->db->data([
         //     'email' => 'hasan',
@@ -16,13 +22,14 @@ class HomeController extends Controller
 
         // ])->insert('users')->lastId();
         // $this->db->query('INSERT INTO users SET email=? , status=?' , 'med@gmail.com' , 'disabled');
-        // $user = $this->db->query('SELECT * FROM users WHERE id = ?', 2)->fetch();
+        // $user = $this->db->query('SELECT * FROM users ORDER BY id')->fetchAll();
         
         // pre($user);
-        $this->db->data('email', 'judo@gmail.com')
-                ->where('id= ?', 1)
-                ->update('users');
+        // $this->db->data('email', 'judo@gmail.com')
+        //         ->where('id= ?', 1)
+        //         ->update('users');
        
+        
     }
 }
 

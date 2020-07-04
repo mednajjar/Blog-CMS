@@ -51,6 +51,42 @@ class Database
      */
     private $wheres = [];
     /**
+     * Selects
+     * 
+     * @var array
+     */
+    private $selects = [];
+    /**
+     * Limit
+     * 
+     * @var int
+     */
+    private $limit;
+    /**
+     * Offset
+     * 
+     * @var int
+     */
+    private $offset;
+     /**
+     * Total rows
+     * 
+     * @var int
+     */
+    private $rows = 0;
+    /**
+     * Joins
+     * 
+     * @var array
+     */
+    private $joins = [];
+     /**
+     * Order By
+     * 
+     * @array
+     */
+    private $orerBy = [];
+    /**
      * Constructor
      * 
      * @param \System\Application $app
@@ -103,13 +139,160 @@ class Database
     /**
      * Get Database Connection Object PDO Object
      * 
-     * @return PDO
+     * @return \PDO
      */
     public function connection()
     {
         return static::$connection;
     }
 
+    /**
+     * Set select clause
+     * 
+     * @param string $select
+     * @return $this
+     */
+    public function select($select)
+    {
+        $this->selects[] = $select;
+
+        return $this;
+    }
+
+    /**
+     * Set join clause
+     * 
+     * @param string $join
+     * @return $this
+     */
+    public function join($join)
+    {
+        $this->joins[] = $join;
+
+        return $this;
+    }
+
+     /**
+     * Set Order By clause
+     * 
+     * @param string $column
+     * @param string $sort
+     * @return $this
+     */
+    public function orderBy($orderBy, $sort = 'ASC')
+    {
+        $this->orerBy = [$orderBy, $sort];
+
+        return $this;
+    }
+
+     /**
+     * Set limit and offset
+     * 
+     * @param int $limit
+     * @param int $offset
+     * @return $this
+     */
+    public function limit($limit, $offset = 0)
+    {
+        $this->limit = $limit;
+        $this->offset = $offset;
+
+        return $this;
+    }
+
+    /**
+     * Fetch Table
+     * This will return only one record
+     * 
+     * @param string $table
+     * @return \stdClass | null
+     */
+    public function fetch($table = null)
+    {
+        if($table){
+            $this->table($table);
+        }
+        $sql = $this->fetchStatement();
+
+        $result = $this->query($sql, $this->bindings)->fetch();
+
+        $this->reset();
+
+        return $result;
+    }
+    /**
+     * Fetch All records from Table
+     * 
+     * @param string $table
+     * @return array
+     */
+    public function fetchAll($table = null)
+    {
+        if($table){
+            $this->table($table);
+        }
+        $sql = $this->fetchStatement();
+
+        $query = $this->query($sql, $this->bindings);
+
+        $results = $query->fetchAll();
+
+        $this->rows = $query->rowCount();
+
+        $this->reset();
+
+        return $results;
+    }
+    /**
+     * Get total rows from last fetch all statement
+     * 
+     * @return int
+     */
+    public function rows()
+    {
+        return $this->rows;
+    }
+    /**
+     * Prepare Select Statement
+     *
+     * @return String 
+     */
+    private function fetchStatement()
+    {
+        $sql='SELECT ';
+
+        if($this->selects)
+        {
+            $sql .= implode(',' , $this->selects);
+        }else{
+            $sql .= '*';
+        }
+        $sql .= ' FROM ' . $this->table . ' ';
+
+        if ($this->joins){
+            $sql .= implode(' ' , $this->joins);
+        }
+
+        if ($this->wheres){
+            $sql .= ' WHERE ' . implode(' ' , $this->wheres);
+        }
+
+        if ($this->limit){
+            $sql .= ' LIMIT ' . $this->limit;
+        }
+
+        if ($this->offset){
+            $sql .= ' OFFSET ' . $this->offset;
+        }
+
+        if ($this->orerBy){
+            $sql .= 'ORDER BY ' . implode(' ', $this->orerBy);
+        }
+
+        return $sql;
+
+    }
     /**
      * Set the table name
      * 
@@ -119,6 +302,39 @@ class Database
     public function table($table)
     {
         $this->table = $table;
+
+        return $this;
+    }
+    /**
+     * set the table name
+     * 
+     * param string $table
+     * @return $this
+     */
+    public function from($table)
+    {
+        return $this->table($table);
+    }
+    /**
+     * Delete caulse
+     * 
+     * @param string $table
+     * @return $this
+     */
+    public function delete($table = null)
+    {
+        if($table){
+            $this->table($table);
+        }
+        $sql = ' DELETE FROM ' . $this->table . ' ';
+
+        if($this->wheres){
+            $sql .= ' WHERE ' . implode(' ' ,$this->wheres);
+        }
+
+        $this->query($sql, $this->bindings);
+
+        $this->reset();
 
         return $this;
     }
@@ -161,6 +377,8 @@ class Database
 
         $this->lastId = $this->connection()->lastInsertId();
 
+        $this->reset();
+
         return $this;
     }
      /**
@@ -180,10 +398,12 @@ class Database
         $sql .= $this->setFields();
 
         if($this->wheres){
-            $sql .= ' WHERE ' . implode('' , $this->wheres);
+            $sql .= ' WHERE ' . implode(' ' , $this->wheres);
         }
 
         $this->query($sql, $this->bindings);
+
+        $this->reset();
 
         return $this;
     }
@@ -283,6 +503,26 @@ class Database
             $this->bindings[] = $value; 
         }
        
+    }
+    /**
+     * Reset All Data
+     * 
+     * @return void
+     */
+    private function reset()
+    {
+        
+      
+        $this->limit = null;
+        $this->table = null;
+        $this->offset = null;
+        $this->data =[];
+        $this->joins = [];
+        $this->wheres = [];
+        $this->orerBy = [];
+        $this->selects = [];
+        $this->bindings =[];
+
     }
     /**
      * call shared application objects dynamically
