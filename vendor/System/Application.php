@@ -61,7 +61,7 @@ class Application
         $output = (string) $this->load->action($controller, $method, $arguments);
 
         $this->response->setOutput($output);
-        
+
         $this->response->send();
     }
     /**
@@ -180,6 +180,8 @@ class Application
             'html' => 'System\\Html',
             'db' => 'System\\Database',
             'view' => 'System\\View\\ViewFactory',
+            'url' => 'System\\Url',
+            
        ];
     }
     /**

@@ -1,5 +1,7 @@
  <?php
 
+ use System\Application;
+
 if (!function_exists('pre'))
  {
     /**
@@ -42,6 +44,21 @@ if(! function_exists('_e')){
     function _e($value)
     {
         return htmlspecialchars($value);
+    }
+    
+}
+if(! function_exists('assets')){
+
+    /**
+     * Generate full path for the given path in public directory
+     * 
+     * @param string $path
+     * @return string
+     */
+    function assets($path)
+    {
+        $app = Application::getInstance();
+        return $app->url->link('public/' .$path);
     }
 }
 
