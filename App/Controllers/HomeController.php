@@ -9,9 +9,11 @@ class HomeController extends Controller
 {
     public function index()
     {
-        pre($this->db->where('id !=?', 2)->fetchAll('users'));
-        echo $this->db->rows();
-        pre($this->db->fetchAll('users'));
+        $users = $this->load->model('Users');
+        pre($users->get(1));
+        // pre($this->db->where('id !=?', 2)->fetchAll('users'));
+        // echo $this->db->rows();
+        // pre($this->db->fetchAll('users'));
         // $users = $this->db->select('*')->from('users')->orderBy('id')->fetchAll();
 
         // pre($users);

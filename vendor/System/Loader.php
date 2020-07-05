@@ -120,7 +120,13 @@ class Loader
      */
     public function model($model)
     {
+        $model = $this->getModelName($model);
 
+        if(! $this->hasModel($model)){
+            $this->addModel($model);
+        }
+
+        return $this->getModel($model);
     }
     /**
      * Determine if the given class exists in the models container
@@ -130,7 +136,7 @@ class Loader
      */
     private function hasModel($model)
     {
-
+        return array_key_exists($model, $this->models);
     }
     /**
      * Create new object for the given model and store it
@@ -141,7 +147,10 @@ class Loader
      */
     private function addModel($model)
     {
+        $object = new $model($this->app);
 
+        // App\models\HomeModel
+        $this->models[$model] = $object;
     }
     /**
      * Get the model object
@@ -151,7 +160,22 @@ class Loader
      */
     private function getModel($model)
     {
+        return $this->models[$model];
 
+    }
+    /**
+     * Get the full class name for the given model
+     * 
+     * @param string $model
+     * @return string
+     */
+    private function getModelName($model)
+    {
+        $model .= 'Model';
+
+        $model = 'App\\Models\\' . $model;
+
+        return str_replace('/', '\\', $model);
     }
 
 }
