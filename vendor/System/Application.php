@@ -60,6 +60,10 @@ class Application
 
         $output = (string) $this->load->action($controller, $method, $arguments);
 
+        // if ($this->route->hasCallsFirst()) {
+        //     $this->route->callFirstCalls();
+        // }
+
         $this->response->setOutput($output);
 
         $this->response->send();

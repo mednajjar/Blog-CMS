@@ -371,7 +371,7 @@ class Database
 
         $sql = 'INSERT INTO ' . $this->table . ' SET ';
 
-        $sql = $this->setFields();
+        $sql .= $this->setFields();
 
         $this->query($sql, $this->bindings);
 

@@ -9,10 +9,10 @@ class HomeController extends Controller
 {
     public function index()
     {
-        echo assets('images/logo.png');
+        // echo assets('images/logo.png');
         // echo $this->url->link('/home');
         // $users = $this->load->model('Users');
-        // pre($users->get(1));
+        // pre($users->all());
         // pre($this->db->where('id !=?', 2)->fetchAll('users'));
         // echo $this->db->rows();
         // pre($this->db->fetchAll('users'));

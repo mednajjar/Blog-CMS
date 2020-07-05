@@ -51,7 +51,7 @@ class Cookie
      */
     public function has($key)
     {
-        return array_key_eists($key, $_COOKIE);
+        return array_key_exists($key, $_COOKIE);
     }
     /**
      * Remove the given key from Cookie

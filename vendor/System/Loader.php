@@ -40,7 +40,7 @@ class Loader
      * @param string $arguments
      * @return mixed
      */
-    public function action($controller, $method, array $arguments)
+    public function action($controller, $method, array $arguments = [])
     {
         $object = $this->controller($controller);
 
